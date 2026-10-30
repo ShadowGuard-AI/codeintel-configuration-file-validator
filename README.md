@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # codeintel-Configuration-File-Validator
 Validates configuration files (e.g., YAML, JSON, INI) against a predefined schema or best practice rules. Identifies missing required fields, incorrect data types, and insecure configurations. Uses libraries like `Cerberus` or `jsonschema`. - Focused on Tools for static code analysis, vulnerability scanning, and code quality assurance
 
