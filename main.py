@@ -133,9 +133,17 @@ def perform_best_practice_validation(config_data):
         bool: True if best practices are followed, False otherwise.
         str: An empty string if validation is successful, otherwise an error message.
     """
-    # Placeholder for best practice checks.
-    # Add your specific checks here (e.g., check for default passwords, insecure settings, etc.).
     errors = []
+
+    # The checks below do mapping lookups. A config that loaded as a
+    # list, a string or None (an empty file) has no keys to check, and
+    # the old code either crashed on the lookup or, for a list,
+    # reported a pass it never performed. Fail with the real reason.
+    if not isinstance(config_data, dict):
+        raise ValueError(
+            f"Best practice checks require a mapping at the top level, "
+            f"got {type(config_data).__name__}"
+        )
 
     if "api_key" in config_data and config_data["api_key"] == "YOUR_API_KEY":
       errors.append("Warning: API key is set to the default value. Please update to a secure value.")
@@ -188,32 +196,3 @@ if __name__ == "__main__":
     main()
 
 
-# Example usage:
-# Create a sample JSON config file named config.json:
-# {
-#   "name": "My Application",
-#   "version": "1.0.0",
-#   "debug": true,
-#   "api_key": "YOUR_API_KEY"
-# }
-
-# Create a sample JSON schema file named schema.json:
-# {
-#   "type": "object",
-#   "properties": {
-#     "name": { "type": "string" },
-#     "version": { "type": "string" },
-#     "debug": { "type": "boolean" },
-#     "api_key": { "type": "string" }
-#   },
-#   "required": ["name", "version"]
-# }
-
-# Run the validator with the schema:
-# python main.py config.json --schema_file schema.json --best_practice
-
-# Run the validator without a schema to skip schema validation:
-# python main.py config.json --best_practice
-
-#  Run the validator without schema or best practices
-# python main.py config.json
