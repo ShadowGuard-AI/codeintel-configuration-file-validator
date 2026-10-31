@@ -15,11 +15,11 @@ def setup_argparse():
     """
     Sets up the argument parser for the command-line interface.
     """
-    parser = argparse.ArgumentParser(description='Validates configuration files against a schema or best practice rules.')
+    parser = argparse.ArgumentParser(description='Validates configuration files against a JSON schema. Without a schema file, the tool only checks that the configuration file parses, unless --best_practice is given.')
     parser.add_argument('config_file', help='Path to the configuration file (YAML or JSON).')
-    parser.add_argument('--schema_file', help='Path to the JSON schema file.  If not provided, basic validation is performed.')
+    parser.add_argument('--schema_file', help='Path to the JSON schema file. If not provided, the tool only checks that the configuration file parses, unless --best_practice is given.')
     parser.add_argument('--format', choices=['json', 'yaml'], help='Specify the format of the configuration file. If not given, it will be inferred from the file extension.')
-    parser.add_argument('--best_practice', action='store_true', help='Enable best practice validation (e.g., check for insecure configurations).')  # Add best practice flag
+    parser.add_argument('--best_practice', action='store_true', help='Enable the one best practice check: the top level api_key must not be left at its default placeholder value. A failure exits 1.')
     return parser.parse_args()
 
 
@@ -123,8 +123,8 @@ def validate_with_schema(config_data, schema_data):
 
 def perform_best_practice_validation(config_data):
     """
-    Performs best practice validation on the configuration data.  This is a placeholder;
-    actual best practice checks should be implemented here.
+    Performs the one best practice check that exists: the top level
+    api_key must not be left at its default placeholder value.
 
     Args:
         config_data (dict): The configuration data to validate.
@@ -175,15 +175,15 @@ def main():
                 logging.error(f"Configuration file is invalid against the schema: {message}")
                 exit(1)  # Exit with an error code if validation fails
         else:
-            logging.info("No schema file provided, skipping schema validation.")
+            logging.info("No schema file provided, skipping schema validation. Only the parse of the configuration file has been checked.")
 
         if args.best_practice:
           is_valid, message = perform_best_practice_validation(config_data)
           if is_valid:
               logging.info("Configuration file passes best practice validation.")
           else:
-              logging.warning(f"Configuration file failed best practice validation: {message}")
-              # Don't exit, just warn. It is common to enable best practice check but not mandate
+              logging.error(f"Configuration file failed best practice validation: {message}")
+              exit(1)  # Exit with an error code if best practice validation fails
         else:
             logging.info("Best practice validation skipped.")
 
