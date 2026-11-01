@@ -88,6 +88,9 @@ def load_schema_file(schema_file):
     try:
         with open(schema_file, 'r') as f:
             try:
+                # I only ever read the schema as JSON, even though the config
+                # itself may be YAML. A YAML schema file fails here as a JSON
+                # decode error, which names the wrong format problem.
                 schema_data = json.load(f)
                 return schema_data
             except json.JSONDecodeError as e:
@@ -145,6 +148,9 @@ def perform_best_practice_validation(config_data):
             f"got {type(config_data).__name__}"
         )
 
+    # I compare against that one exact placeholder string. Any
+    # other weak value, an empty string, or a lower case spelling of
+    # the same placeholder passes this check untouched.
     if "api_key" in config_data and config_data["api_key"] == "YOUR_API_KEY":
       errors.append("Warning: API key is set to the default value. Please update to a secure value.")
 
@@ -161,6 +167,9 @@ def main():
     args = setup_argparse()
 
     try:
+        # I load the config before I look at the schema path at all, so
+        # when both files are bad the error always names the config and
+        # the schema problem waits for a second run to surface.
         config_data = load_config_file(args.config_file, args.format)
         logging.info(f"Configuration file loaded: {args.config_file}")
 
