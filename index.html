@@ -3,163 +3,86 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Codeintel Configuration File Validator: what it is, how it runs, where it stops</title>
-<meta name="description" content="Codeintel Configuration File Validator is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
+<title>codeintel-configuration-file-validator: An Amnesty Day Book</title>
+<meta name="description" content="Validates configuration files, JSON or YAML, against a JSON Schema, or runs the one built in best practice check on the top level api_key.">
 <style>
-:root {
-  --bg: #1e2014; --panel: #2c2e1e; --ink: #eeecdc;
-  --mut: #3b3e28;
-  --acc: #ceb25c; --acc2: #b2603e;
-  --line: #2c2e1e;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'Consolas', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
+@font-face{font-family:'Baskervville SC';src:url('fonts/BaskervvilleSC.ttf') format('truetype');}
+@font-face{font-family:'Barlow';src:url('fonts/Barlow.ttf') format('truetype');}
+:root{--canvas:#e9e0cb;--cream:#f6eed6;--steel:#34383c;--wood:#966e46;--ink:#1e2022}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:'Barlow',sans-serif;line-height:1.65}
+h1,h2,h3{font-family:'Baskervville SC',serif;color:var(--steel)}
+.heroimg{width:100%;height:54vh;object-fit:cover;display:block}
+.hero .in,main,footer{max-width:1120px;margin:0 auto;padding:1rem 6vw 2rem}.logo{width:230px}
+nav{display:flex;gap:1rem;flex-wrap:wrap;margin:1.2rem 0}
+.btn{display:inline-block;text-decoration:none;font-family:'Baskervville SC',serif;color:var(--steel);background:var(--cream);border:2px solid var(--steel);padding:.7rem 1.2rem .7rem 2.4rem;position:relative}
+.btn::before{content:'';position:absolute;left:.8rem;top:50%;width:10px;height:10px;margin-top:-6px;border:2px solid var(--steel);border-radius:50%}
+.btn:hover{box-shadow:inset 0 -4px 0 var(--wood)}
+.btn:focus-visible{outline:3px double var(--steel);outline-offset:3px}
+a{color:var(--steel)}a::before{content:'';display:inline-block;width:16px;height:11px;margin-right:.5em;background:var(--cream);border:1.5px solid var(--steel);transform:rotate(-6deg);vertical-align:0}
+section.page{background:var(--cream);border:1px solid #cfc4a6;border-bottom:10px solid #b9ac8c;padding:.4rem 1.5rem 1.3rem;margin:1.8rem 0}
+pre{background:var(--steel);color:var(--cream);padding:1rem;overflow-x:auto}
+.tags{height:30px;margin:1.6rem 0;border-top:2px solid var(--steel);background:radial-gradient(circle at 8px -4px,transparent 5px,var(--steel) 6px,transparent 7px);background-size:110px 30px}
+.callout{background:#efe6cd;border:2px solid var(--steel);padding:.2rem 1.3rem 1rem;margin:1.3rem 0}
+.flag{border:2px solid var(--wood);padding:.2rem 1.2rem 1rem;margin:1.2rem 0}
+.entry{display:flex;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(30,32,34,.22)}.entry b{font-family:'Baskervville SC',serif;min-width:130px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--wood);margin-right:.5em}
+.exit{font-weight:700}
 </style>
 </head>
-<body class="layout-poster">
-<!-- This page exists for codeintel-configuration-file-validator alone: the layout (poster),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
+<body>
 <header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Codeintel Configuration File Validator logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Codeintel Configuration File Validator</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/codeintel-configuration-file-validator">github.com/ShadowGuard-AI/codeintel-configuration-file-validator</a></p>
+<img class="heroimg" src="assets/intro-banner.png" alt="Pavement with the first surrendered knife lying flat and its blank tag beside it, the amnesty bin at standing height in the middle, and the base of the welded figure rising out of the top of the frame, with no lettering anywhere">
+<div class="in">
+<img class="logo" src="assets/logo.png" alt="A tall plain steel amnesty bin with a narrow slot and a latched door, one surrendered knife laid flat on the ground before it, and the name codeintel-configuration-file-validator beneath in Baskervville SC in tag cream on a dark ground">
+<h1>codeintel-configuration-file-validator</h1>
+<p>An amnesty day book kept at the foot of the sculpture. A thing is handed in, measured against the one rule of the place, and received or refused on the spot.</p>
+<nav>
+<a class="btn" href="#work">Validate This Configuration</a>
+<a class="btn" href="#params">Load a JSON Schema</a>
+<a class="btn" href="#params">Run the Api Key Check</a>
+<a class="btn" href="#params">Show Help</a>
+</nav>
+</div>
 </header>
-
 <main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/codeintel-configuration-file-validator">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Codeintel Configuration File Validator is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Codeintel Configuration File Validator: 5 files, 219 counted
-          lines across Python 198, Markdown 19, Text 2. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/codeintel-configuration-file-validator.git<br>$ cd codeintel-configuration-file-validator</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 12 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>
-
-def setup_argparse():
-    &quot;&quot;&quot;
-    Sets up the argument parser for the command-line interface.
-    &quot;&quot;&quot;
-    parser = argparse.ArgumentParser(description=&#x27;Validates configuration files against a schema or best practice rules.&#x27;)
-    parser.add_argument(&#x27;config_file&#x27;, help=&#x27;Path to the configuration file (YAML or JSON).&#x27;)
-    parser.add_argument(&#x27;--schema_file&#x27;, help=&#x27;Path to the JSON schema file.  If not provided, basic validation is performed.&#x27;)
-    parser.add_argument(&#x27;--format&#x27;, choices=[&#x27;json&#x27;, &#x27;yaml&#x27;], help=&#x27;Specify the format of the configuration file. If not given, it will be inferred from the file extension.&#x27;)
-    parser.add_argument(&#x27;--best_practice&#x27;, action=&#x27;store_true&#x27;, help=&#x27;Enable best practice validation (e.g., check for insecure configurations).&#x27;)  # Add best practice flag
-    return parser.parse_args()
-
-
-def load_config_file(config_file, format=None):
-    &quot;&quot;&quot;
-    Loads the configuration file from the given path.
-
-    Args:
-        config_file (str): Path to the configuration file.
-        format (str, optional):  The format of the config file (&#x27;json&#x27; or &#x27;yaml&#x27;). If None, attempts to determine it from extension.</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>198</td></tr>
-        <tr><td><code>README.md</code></td><td>19</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>2</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">setup_argparse, load_config_file, load_schema_file, validate_with_schema, perform_best_practice_validation, main</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/codeintel-configuration-file-validator/tree/main/codeintel-configuration-file-validator-Visuals">codeintel-configuration-file-validator-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Codeintel Configuration File Validator">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Codeintel Configuration File Validator">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Codeintel Configuration File Validator">
-        </div>
-      </section>
-    </div>
-  </section>
+<section class="page" id="work"><h2>Validated Against a Schema</h2>
+<p>codeintel-configuration-file-validator validates configuration files, JSON or YAML, against a JSON Schema. It identifies missing required fields and incorrect data types against the schema. It uses jsonschema, named here in the same plain way the README names it.</p>
+<h2>One Built In Check Only</h2>
+<p>Or it runs the one built in best practice check: the top level api_key must not be left at its default placeholder value.</p>
+<h2>A Placeholder Api Key Exits 1</h2>
+<p class="exit">A failure of that check exits 1.</p>
+</section>
+<div class="tags"></div>
+<section class="page"><h2>Install, One Clone Line</h2>
+<pre>git clone https://github.com/ShadowStrikeHQ/codeintel-configuration-file-validator</pre>
+<div class="flag"><h3>Clone Line Flagged</h3>
+<p>The line names ShadowStrikeHQ, not ShadowGuard-AI, and it stands flagged rather than quietly corrected. The README gives no change of directory and no dependency step after the clone, although its own first page names jsonschema as the library in use.</p></div>
+</section>
+<div class="tags"></div>
+<section class="page" id="usage"><h2>Usage, the Placeholder Shown for What It Is</h2>
+<pre>./codeintel-configuration-file-validator [params]</pre>
+<div class="callout"><h3>The README Names No Configuration File</h3>
+<p>The README prints that line as its whole usage line, and its parameter list also names no configuration file argument at all, listing only options, so a reader following the README alone would not know what file to hand the validator. No fuller invocation is invented on this page.</p></div>
+</section>
+<div class="tags"></div>
+<section class="page" id="params"><h2>Parameters, Four Entries and No More</h2>
+<div class="entry"><b>-h</b><span>Shows a help message and exits.</span></div>
+<div class="entry"><b><span class="dot"></span>--schema_file</b><span>Gives the path to the JSON schema file. If not provided, the tool only checks that the configuration file parses, unless --best_practice is given.</span></div>
+<div class="entry"><b>--format</b><span>Specifies the format of the configuration file. If not given, it will be inferred from the file extension.</span></div>
+<div class="entry"><b><span class="dot"></span>--best_practice</b><span>Runs the one best practice check: the top level api_key must not be left at its default placeholder value, and a failure exits 1. This is the one check the tool carries built in.</span></div>
+<div class="callout"><h3>Without a Schema, Only Parsing Is Checked</h3>
+<p>The absence of a schema changes what a run means, and this page records that condition in full.</p></div>
+</section>
+<div class="tags"></div>
+<section class="page"><h2>What a Run Can and Cannot Settle</h2>
+<h2>Parses Is Not Validated</h2>
+<p>With a schema, missing required fields and incorrect data types are identified against that schema. Without a schema and without --best_practice, a run settles only that the file parses, and this page does not dress that up as validation. With --best_practice and no schema, the one built in rule is the whole judgement. No drift is watched, no live system is visited, and no file is repaired. A file is checked as it stands, once, and reported.</p>
+<p><a href="https://github.com/ShadowGuard-AI/codeintel-configuration-file-validator">The repository on GitHub</a></p>
+<h2>Licence, Closing the Day Book</h2>
+<pre>Copyright (c) ShadowStrikeHQ</pre>
+<p>Printed as it stands and flagged beside the install line fault. No licence name is given in the README, and this page invents none.</p>
+</section>
 </main>
-<footer>
-  <p>Codeintel Configuration File Validator is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
-</footer>
+<footer><p>Theme: Knife Angel Amnesty Bin. Type: Baskervville SC for display, Barlow for reading, both SIL Open Font License 1.1. No lettering reference is recorded for this project, and none is embedded.</p></footer>
 </body>
 </html>
