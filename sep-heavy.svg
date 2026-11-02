@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 40" role="img" aria-label="Major separator: a fine dark steel rule carrying a row of small blank tags on twine across the full width, each tag hanging from its own short string">
+<rect x="0" y="0" width="1200" height="40" fill="#f6eed6"/>
+<line x1="0" y1="8" x2="1200" y2="8" stroke="#34383c" stroke-width="2"/>
+<g stroke="#aa966e" stroke-width="1.5" fill="#f6eed6"><line x1="120" y1="8" x2="120" y2="18"/><rect x="108" y="18" width="24" height="16"/><line x1="330" y1="8" x2="330" y2="18"/><rect x="318" y="18" width="24" height="16"/><line x1="540" y1="8" x2="540" y2="18"/><rect x="528" y="18" width="24" height="16"/><line x1="750" y1="8" x2="750" y2="18"/><rect x="738" y="18" width="24" height="16"/><line x1="960" y1="8" x2="960" y2="18"/><rect x="948" y="18" width="24" height="16"/></g>
+</svg>
