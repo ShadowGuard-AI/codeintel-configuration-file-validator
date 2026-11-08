@@ -1,12 +1,12 @@
-![Pavement with the first surrendered knife lying flat and its blank tag beside it in the foreground, the amnesty bin at standing height in the middle with a short row of tagged knives before it, and the base of the welded figure rising out of the top of the frame, with no lettering anywhere](intro-banner.png)
+![A crusty loaf and the brass standard weights close up at balance on the scale with the inspector's hand at the frame edge and the waiting bakers' trays soft behind](intro-banner.png)
 
 > Day book plate: the date line of the book, ruled like an entry heading. A tiny bin glyph sits beside this heading and no other.
 
 # codeintel-Configuration-File-Validator
 
-![A tall plain steel amnesty bin with a narrow slot and a latched door, one surrendered knife laid flat on the ground before it, and the name beneath in Baskervville SC in tag cream on a dark ground, the heading plate](logo.png)
+![A drawn emblem of one round crusty loaf resting on a brass balance pan with a row of brass standard weights beside it on canvas, the heading plate](logo.png)
 
-![The foot of the Knife Angel in bright midday light: the welded figure rising out of the top of the picture, its base plinth carrying codeintel-configuration-file-validator in tag cream, the amnesty bin in the foreground, and a short queue of tagged knives laid in a row on the pavement before it](banner.png)
+![An assize inspection stall in a market where the inspector weighs a crusty loaf on a brass scale beside the open box of standard weights with its red wax seal, a queue of bakers' trays waiting behind the stall under canvas](banner.png)
 
 ![The foot of the sculpture in three depths: the welded figure stays still while cloud shadow passes once, the row of tagged knives shortens by one across a long interval as a single knife is received through the bin slot, and the blank tags on the remaining knives swing a fraction on their twine and settle](scene.svg)
 
